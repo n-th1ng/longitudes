@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { getTeamByInviteCode } from '@/lib/api';
-import { db } from '@/lib/db';
+import { db, initDB } from '@/lib/db';
 import { nanoid } from 'nanoid';
 
 export async function POST(request: NextRequest) {
+  await initDB();
   const session = await getServerSession(authOptions);
   if (!session?.user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

@@ -2,8 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { createTeam, getUserTeams } from '@/lib/api';
+import { initDB } from '@/lib/db';
 
 export async function GET() {
+  await initDB();
   const session = await getServerSession(authOptions);
   if (!session?.user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -14,6 +16,7 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
+  await initDB();
   const session = await getServerSession(authOptions);
   if (!session?.user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

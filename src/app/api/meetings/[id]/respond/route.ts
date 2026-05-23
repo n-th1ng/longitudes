@@ -2,11 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { updateMeetingStatus } from '@/lib/api';
+import { initDB } from '@/lib/db';
 
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  await initDB();
   const { id } = await params;
   const session = await getServerSession(authOptions);
   if (!session?.user) {
